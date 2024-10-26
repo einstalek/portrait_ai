@@ -1,0 +1,555 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "TurboVisionXL - Super Fast XL based on new SDXL Turbo - 3 - 5 step quality output at high resolutions!/turbovisionxlSuperFastXLBasedOnNew_tvxlV431Bakedvae-mid_215418-vid_273102.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "5": {
+    "inputs": {
+      "instantid_file": "ip-adapter.bin"
+    },
+    "class_type": "InstantIDModelLoader",
+    "_meta": {
+      "title": "Load InstantID Model"
+    }
+  },
+  "6": {
+    "inputs": {
+      "provider": "CPU"
+    },
+    "class_type": "PulidInsightFaceLoader",
+    "_meta": {
+      "title": "Load InsightFace (PuLID)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "control_net_name": "diffusion_pytorch_model.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "9": {
+    "inputs": {
+      "text": "(real photo), ((photo of me)), ((looking directly at the camera))",
+      "clip": [
+        "82",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "11": {
+    "inputs": {
+      "text": "(lowres), text, error, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, (blurry), dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature, monochrome",
+      "clip": [
+        "82",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "17": {
+    "inputs": {
+      "seed": 552119934909183,
+      "steps": 12,
+      "cfg": 2,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 0.85,
+      "model": [
+        "64",
+        0
+      ],
+      "positive": [
+        "64",
+        1
+      ],
+      "negative": [
+        "64",
+        2
+      ],
+      "latent_image": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "18": {
+    "inputs": {
+      "image": "13.webp",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "19": {
+    "inputs": {
+      "pixels": [
+        "33",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "20": {
+    "inputs": {
+      "samples": [
+        "17",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "22": {
+    "inputs": {
+      "seed": 424596898782146,
+      "steps": 30,
+      "cfg": 2,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 0.4,
+      "model": [
+        "72",
+        0
+      ],
+      "positive": [
+        "72",
+        1
+      ],
+      "negative": [
+        "72",
+        2
+      ],
+      "latent_image": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "23": {
+    "inputs": {
+      "samples": [
+        "22",
+        0
+      ],
+      "vae": [
+        "38",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "33": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "width": 1048,
+      "height": 1048,
+      "crop": "disabled",
+      "image": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "34": {
+    "inputs": {
+      "model_name": "codeformer.pth"
+    },
+    "class_type": "FaceRestoreModelLoader",
+    "_meta": {
+      "title": "FaceRestoreModelLoader"
+    }
+  },
+  "35": {
+    "inputs": {
+      "facedetection": "retinaface_resnet50",
+      "codeformer_fidelity": 0.9,
+      "facerestore_model": [
+        "34",
+        0
+      ],
+      "image": [
+        "20",
+        0
+      ]
+    },
+    "class_type": "FaceRestoreCFWithModel",
+    "_meta": {
+      "title": "FaceRestoreCFWithModel"
+    }
+  },
+  "38": {
+    "inputs": {
+      "ckpt_name": "Juggernaut XL/juggernautXL_juggXIByRundiffusion-mid_133005-vid_782002.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "41": {
+    "inputs": {
+      "lora_name": "Real Humans/real-humans-PublicPrompts-mid_232746-vid_262705.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0.8,
+      "model": [
+        "38",
+        0
+      ],
+      "clip": [
+        "38",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "64": {
+    "inputs": {
+      "ip_weight": 1.2,
+      "cn_strength": 1.2,
+      "start_at": 0,
+      "end_at": 0.9500000000000001,
+      "noise": 0,
+      "combine_embeds": "average",
+      "instantid": [
+        "5",
+        0
+      ],
+      "insightface": [
+        "6",
+        0
+      ],
+      "control_net": [
+        "7",
+        0
+      ],
+      "image": [
+        "71",
+        0
+      ],
+      "model": [
+        "82",
+        0
+      ],
+      "positive": [
+        "9",
+        0
+      ],
+      "negative": [
+        "11",
+        0
+      ],
+      "image_kps": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "ApplyInstantIDAdvanced",
+    "_meta": {
+      "title": "Apply InstantID Advanced"
+    }
+  },
+  "65": {
+    "inputs": {
+      "image1": [
+        "66",
+        0
+      ],
+      "image2": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "66": {
+    "inputs": {
+      "image": "Screenshot 2024-10-25 at 16.22.43.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "67": {
+    "inputs": {
+      "image": "Screenshot 2024-10-25 at 16.21.01.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "68": {
+    "inputs": {
+      "image": "Screenshot 2024-10-25 at 16.22.36.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "69": {
+    "inputs": {
+      "image1": [
+        "65",
+        0
+      ],
+      "image2": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "70": {
+    "inputs": {
+      "image": "Screenshot 2024-10-25 at 16.24.06.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "71": {
+    "inputs": {
+      "image1": [
+        "69",
+        0
+      ],
+      "image2": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "72": {
+    "inputs": {
+      "ip_weight": 1.1,
+      "cn_strength": 1.1,
+      "start_at": 0,
+      "end_at": 1,
+      "noise": 0,
+      "combine_embeds": "average",
+      "instantid": [
+        "5",
+        0
+      ],
+      "insightface": [
+        "6",
+        0
+      ],
+      "control_net": [
+        "7",
+        0
+      ],
+      "image": [
+        "71",
+        0
+      ],
+      "model": [
+        "41",
+        0
+      ],
+      "positive": [
+        "74",
+        0
+      ],
+      "negative": [
+        "75",
+        0
+      ],
+      "image_kps": [
+        "20",
+        0
+      ]
+    },
+    "class_type": "ApplyInstantIDAdvanced",
+    "_meta": {
+      "title": "Apply InstantID Advanced"
+    }
+  },
+  "74": {
+    "inputs": {
+      "text": "(real photo), ((photo of me)), ((looking directly at the camera))",
+      "clip": [
+        "41",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "75": {
+    "inputs": {
+      "text": "(lowres), text, error, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, (blurry), dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature, monochrome",
+      "clip": [
+        "41",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "76": {
+    "inputs": {
+      "facedetection": "retinaface_resnet50",
+      "codeformer_fidelity": 0.9,
+      "facerestore_model": [
+        "34",
+        0
+      ],
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "FaceRestoreCFWithModel",
+    "_meta": {
+      "title": "FaceRestoreCFWithModel"
+    }
+  },
+  "78": {
+    "inputs": {
+      "amount": 2,
+      "samples": [
+        "19",
+        0
+      ]
+    },
+    "class_type": "RepeatLatentBatch",
+    "_meta": {
+      "title": "Repeat Latent Batch"
+    }
+  },
+  "81": {
+    "inputs": {
+      "pixels": [
+        "35",
+        0
+      ],
+      "vae": [
+        "38",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "82": {
+    "inputs": {
+      "lora_name": "Real Humans/real-humans-PublicPrompts-mid_232746-vid_262705.safetensors",
+      "strength_model": 0.25,
+      "strength_clip": 0.25,
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "87": {
+    "inputs": {
+      "blend_factor": 0.33,
+      "blend_mode": "normal",
+      "image1": [
+        "23",
+        0
+      ],
+      "image2": [
+        "76",
+        0
+      ]
+    },
+    "class_type": "ImageBlend",
+    "_meta": {
+      "title": "ImageBlend"
+    }
+  },
+  "88": {
+    "inputs": {
+      "images": [
+        "87",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  }
+}
