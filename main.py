@@ -92,7 +92,7 @@ def google_callback(user_dict):
         st.session_state.client_id = client_id
 
 try:
-    load_dotenv("./env")
+    load_dotenv()
 except:
     print('WARNING: .env file not found, set env variables')
     pass
@@ -100,14 +100,15 @@ except:
 COOKIE_KEY = os.getenv('COOKIE_KEY')
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-REDIRECT_URL = os.getenv('REDIRECT_URL')
+REDIRECT_URI = os.getenv('REDIRECT_URI')
+
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
 config['cookie']['key'] = COOKIE_KEY
 config['oauth2']['google']['client_id'] = CLIENT_ID
 config['oauth2']['google']['client_secret'] = CLIENT_SECRET
-config['oauth2']['google']['redirect_url'] = REDIRECT_URL
+config['oauth2']['google']['redirect_uri'] = REDIRECT_URI
 
 authenticator = stauth.Authenticate(
     config['credentials'],

@@ -8,8 +8,7 @@ oauth2:
   google:
     client_id: null
     client_secret: null
-    redirect_uri: ''
-    redirect_url: null
+    redirect_uri: null
   microsoft:
     client_id: null
     client_secret: null
