@@ -101,6 +101,7 @@ COOKIE_KEY = os.getenv('COOKIE_KEY')
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
+COMFY_URI = os.getenv('COMFY_URI')
 
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -172,10 +173,14 @@ if st.session_state['authentication_status']:
             if "/0.png" in template_image_filepath:
                 outputs_filepaths = get_portrait_random(selfie_filepaths, 
                                                  prompt, negative_prompt, 
-                                                 resemblance, st.session_state.client_id)
+                                                 resemblance, 
+                                                 st.session_state.client_id,
+                                                 COMFY_URI)
             else:
                 outputs_filepaths = get_portrait(template_image_filepath, selfie_filepaths, 
-                                                prompt, negative_prompt, resemblance, st.session_state.client_id)
+                                                prompt, negative_prompt, resemblance, 
+                                                st.session_state.client_id, 
+                                                COMFY_URI)
             st.toast("It's done!", icon='😍')
             with generated_images_placeholder.container():
                 st.session_state.all_generated_images = outputs_filepaths + st.session_state.all_generated_images

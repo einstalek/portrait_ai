@@ -9,27 +9,26 @@ from PIL import Image
 import io
 import os
 
-server_address = "https://e0dyf81kl423t5-8188.proxy.runpod.net/api"
 
-def queue_prompt(prompt, client_id):
+def queue_prompt(prompt, client_id, server_address):
     p = {"prompt": prompt, "client_id": client_id}
     response = requests.post(f"{server_address}/prompt", json=p)
     response.raise_for_status()  # Raise an error for bad status codes
     return response.json()  # Parse JSON directly from the response
 
-def get_image(filename, subfolder, folder_type):
+def get_image(filename, subfolder, folder_type, server_address):
     params = {"filename": filename, "subfolder": subfolder, "type": folder_type}
     response = requests.get(f"{server_address}/view", params=params)
     response.raise_for_status()  # Raise an error for bad status codes
     return response.content  # Return the raw image data
 
-def get_history(prompt_id):
+def get_history(prompt_id, server_address):
     response = requests.get(f"{server_address}/history/{prompt_id}")
     response.raise_for_status()  # Raise an error for bad status codes
     return response.json()  # Parse JSON directly from the response
 
-def get_images(ws, prompt, client_id):
-    prompt_id = queue_prompt(prompt, client_id)['prompt_id']
+def get_images(ws, prompt, client_id, server_address):
+    prompt_id = queue_prompt(prompt, client_id, server_address)['prompt_id']
     output_images = {}
     while True:
         out = ws.recv()
@@ -42,20 +41,20 @@ def get_images(ws, prompt, client_id):
         else:
             continue 
 
-    history = get_history(prompt_id)[prompt_id]
+    history = get_history(prompt_id, server_address)[prompt_id]
     for o in history['outputs']:
         for node_id in history['outputs']:
             node_output = history['outputs'][node_id]
             if 'images' in node_output:
                 images_output = []
                 for image in node_output['images']:
-                    image_data = get_image(image['filename'], image['subfolder'], image['type'])
+                    image_data = get_image(image['filename'], image['subfolder'], image['type'], server_address)
                     images_output.append(image_data)
             output_images[node_id] = images_output
     return output_images
 
 
-def upload_image(img_path):
+def upload_image(img_path, server_address):
     with open(img_path, "rb") as image_file:
         files = {
             "image": image_file,
@@ -69,17 +68,17 @@ def upload_image(img_path):
         return comfy_path
     
 
-def get_portrait(template_filepath, selfie_filepaths, positive_prompt, negative_prompt, resemblance, client_id):
+def get_portrait(template_filepath, selfie_filepaths, positive_prompt, negative_prompt, resemblance, client_id, server_address):
     file_path = "./workflow_fast_runpod_api.json"
     with open(file_path, 'r') as file:
         prompt = json.load(file)
 
     # upload images to comfy
-    comfy_template_filepath = upload_image(template_filepath)
+    comfy_template_filepath = upload_image(template_filepath, server_address)
 
     comfy_selfie_filepaths = []
     for fp in selfie_filepaths:
-        comfy_selfie_filepaths.append(upload_image(fp))
+        comfy_selfie_filepaths.append(upload_image(fp, server_address))
 
     # image nodes info
     prompt['18']['inputs']['image'] = comfy_template_filepath
@@ -106,7 +105,7 @@ def get_portrait(template_filepath, selfie_filepaths, positive_prompt, negative_
     ws = websocket.WebSocket()
     ws.connect("wss://{}/ws?clientId={}".format(server_address.replace('https://', ''), client_id))
 
-    images = get_images(ws, prompt, client_id)
+    images = get_images(ws, prompt, client_id, server_address)
 
     outputs_filepaths = []
     for node_id in images:
@@ -118,14 +117,14 @@ def get_portrait(template_filepath, selfie_filepaths, positive_prompt, negative_
     return outputs_filepaths
 
 
-def get_portrait_random(selfie_filepaths, positive_prompt, negative_prompt, resemblance, client_id):
+def get_portrait_random(selfie_filepaths, positive_prompt, negative_prompt, resemblance, client_id, server_address):
     file_path = "./workflow_no_template_api.json"
     with open(file_path, 'r') as file:
         prompt = json.load(file)
 
     comfy_selfie_filepaths = []
     for fp in selfie_filepaths:
-        comfy_selfie_filepaths.append(upload_image(fp))
+        comfy_selfie_filepaths.append(upload_image(fp, server_address))
 
     # image nodes info
     for i, node_id in enumerate([66, 67, 68, 70]):
@@ -151,7 +150,7 @@ def get_portrait_random(selfie_filepaths, positive_prompt, negative_prompt, rese
     ws = websocket.WebSocket()
     ws.connect("wss://{}/ws?clientId={}".format(server_address.replace('https://', ''), client_id))
 
-    images = get_images(ws, prompt, client_id)
+    images = get_images(ws, prompt, client_id, server_address)
 
     outputs_filepaths = []
     for node_id in images:
