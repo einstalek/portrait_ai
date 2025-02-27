@@ -2,3 +2,4 @@ streamlit-authenticator
 streamlit-image-select
 websocket-client
 python-dotenv
+boto3
