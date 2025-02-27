@@ -211,7 +211,7 @@ if st.session_state['authentication_status']:
             scale = max(h, w) / 512
             new_size = [int(t / scale) for t in (h, w)]
             img.thumbnail(new_size)
-            col.image(img, use_column_width=True)
+            col.image(img, use_container_width=True)
 
     '---'
 
