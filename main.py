@@ -225,13 +225,6 @@ if st.session_state['authentication_status']:
 
     # all previously generated images: st.session_state.all_generated_images
     generated_images_placeholder = st.empty()
-    if len(st.session_state.all_generated_images) > 0:
-        with generated_images_placeholder.container():
-            img = image_select(
-                label="Your generations 🔥",
-                images=st.session_state.all_generated_images,
-                use_container_width=True,
-            )
 
     def update_ui(job_completed=False, job_failed=False, images=None):
         if job_failed:
