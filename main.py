@@ -114,12 +114,11 @@ def google_callback(user_dict):
         st.session_state.client_id = client_id
 
 
-def poll_job_status(job_id, update_ui_callback, period=3):
+def poll_job_status(job_id, client_id, update_ui_callback, period=3):
     """
     Runs in the background to check job status periodically.
     When completed, it downloads the image and updates the UI.
     """
-    global CLIENT_ID
     status = "PENDING"
     
     while status not in ["COMPLETED", "FAILED"]:
@@ -136,7 +135,7 @@ def poll_job_status(job_id, update_ui_callback, period=3):
     if output_urls:
         image_paths = []
         for i, url in enumerate(output_urls):
-            local_filename = f"./output/{CLIENT_ID}-{job_id}-{i+1}.jpg"
+            local_filename = f"./output/{client_id}-{job_id}-{i+1}.jpg"
             download_image_from_s3(url, local_filename)
             image_paths.append(local_filename)
         update_ui_callback(job_completed=True, images=image_paths)
@@ -169,24 +168,23 @@ authenticator = stauth.Authenticate(
 
 ########################### App ###########################
 
-generations = glob.glob(f"./output/{CLIENT_ID}-*")
-generations.sort(key=os.path.getmtime)
-if len(generations) > MAX_DISPLAY_IMAGES:
-    for fp in generations[:-MAX_DISPLAY_IMAGES]:
-        try:
-            os.remove(fp)
-        except:
-            print(f"Couldn't remove generation {fp}")
-    generations = generations[-MAX_DISPLAY_IMAGES:]
-st.session_state.all_generated_images.extend(
-    generations
-)
-
-
 if st.session_state['authentication_status']:
     authenticator.logout()
     if st.session_state["email"] is not None:
         st.session_state.client_id = generate_unique_id(st.session_state["email"])
+    
+    generations = glob.glob(f"./output/{st.session_state.client_id}-*")
+    generations.sort(key=os.path.getmtime)
+    if len(generations) > MAX_DISPLAY_IMAGES:
+        for fp in generations[:-MAX_DISPLAY_IMAGES]:
+            try:
+                os.remove(fp)
+            except:
+                print(f"Couldn't remove generation {fp}")
+        generations = generations[-MAX_DISPLAY_IMAGES:]
+    st.session_state.all_generated_images.extend(
+        generations
+    )
     
     st.info(f'**Welcome {st.session_state["name"]}**', icon="👋🏾")
 
@@ -253,11 +251,11 @@ if st.session_state['authentication_status']:
             st.toast("Uploading template image")
             # upload to aws
             template_url = upload_and_get_presigned_url(image_path=template_image_filepath, 
-                                                        client_id=CLIENT_ID, 
+                                                        client_id=st.session_state.client_id, 
                                                         folder='input')
             st.toast("Uploading selfies")
             selfie_urls = upload_images_concurrently(selfie_filepaths, 
-                                                     client_id=CLIENT_ID, 
+                                                     client_id=st.session_state.client_id, 
                                                      folder='input')
             
             for fp in selfie_filepaths:
@@ -272,7 +270,7 @@ if st.session_state['authentication_status']:
                                        resemblance, 
                                        cn_strength,
                                        steps)
-            poll_job_status(job_id, update_ui)
+            poll_job_status(job_id, st.session_state.client_id, update_ui)
 
             st.toast("It's done!", icon='😍')
 
